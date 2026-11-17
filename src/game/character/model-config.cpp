@@ -2,6 +2,7 @@
 #include "lc1/error.hpp"
 #include "lc1/game/character/character-body.hpp"
 #include "lc1/game/character/character-model.hpp"
+#include "lc1/utf8-path.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -160,7 +161,7 @@ void validate_model_config(ModelConfig const &config)
     for (auto const &name : {config.path.value(), material.base_color_texture.value(),
                              material.metallic_roughness_texture.value(),
                              material.normal_texture.value(), material.emissive_texture.value()}) {
-        auto const path = std::filesystem::path{name}.lexically_normal();
+        auto const path = path_from_utf8(name).lexically_normal();
         if (path.is_absolute() || (!path.empty() && *path.begin() == ".."))
             fail("model asset path must stay relative to the asset root: {}", name);
     }
@@ -203,7 +204,7 @@ scene::Model load_configured_model(ModelConfig const &config,
         : config.path.value() == "builtin:torch"    ? make_torch_model()
         : config.path.value().empty()
             ? make_character_model(body)
-            : scene::Model::load_from_file(asset_root / config.path.value(),
+            : scene::Model::load_from_file(asset_root / path_from_utf8(config.path.value()),
                                            scene::GltfMaterialPolicy::UseExternal);
     std::vector<scene::Mesh> meshes;
     for (std::size_t i = 0; i < imported.mesh_count(); ++i) {

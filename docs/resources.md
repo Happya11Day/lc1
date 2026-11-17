@@ -9,6 +9,8 @@
   `load_from_file(Device const&, path const&) -> T`。网格仍使用独立缓存。
   `GpuTexture` 上传 CPU Image，不是文件加载 Resource；ResourceManager 不依赖 Renderer。
 - 资源 ID 相对于指定 asset root 词法规范化，拒绝绝对路径和目录逃逸；不合并符号链接别名。
+- 存档与材质配置中的路径按 UTF-8 保存；进入 `std::filesystem` 前统一经 `path_from_utf8()`
+  转换，避免 Windows 使用 ANSI 代码页解释中文资源名。
 - 卸载会立即使该资源的借用失效，没有引用计数。卸载资源或销毁 manager 前，必须停止使用相关借用，
   并等待使用它的 GPU 工作完成。RAII 销毁本身不等待 GPU。
 - `scene::Scene` 中的实例、`DrawItem`、`scene::Object`、`RenderTarget` 借用资源；资源在成员声明顺序中先于使用者。
