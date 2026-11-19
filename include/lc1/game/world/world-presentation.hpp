@@ -151,7 +151,7 @@ class WorldPresentation {
                        ModelConfig const &config, CharacterBody const &body);
     };
 
-    std::map<std::pair<std::string, TextureColorSpace>, std::unique_ptr<GpuTexture>>
+    std::map<std::pair<std::filesystem::path, TextureColorSpace>, std::unique_ptr<GpuTexture>>
         model_textures_;
     std::vector<std::unique_ptr<ModelResources>> model_resources_;
     // Required scene-owned borrows, valid until scene_ is destroyed.

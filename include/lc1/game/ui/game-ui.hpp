@@ -7,6 +7,7 @@
 #include "lc1/vk/render/volumetric-clouds.hpp"
 #include "lc1/vk/resources/gpu-font.hpp"
 #include <array>
+#include <filesystem>
 #include <optional>
 #include <span>
 
@@ -47,6 +48,8 @@ struct GameUiActions {
 
 class GameUi {
   public:
+    explicit GameUi(std::filesystem::path settings_file = {});
+
     GameUiActions update(GameUiInfo const &info, MusicBrowser &music);
 
     bool gameplay_enabled() const;
@@ -74,9 +77,12 @@ class GameUi {
 
   private:
     void player_info(GameUiInfo const &info, GameUiActions &actions);
+    void persist_ui_scale() const;
 
     enum class State { MainMenu, InSettings, InGame };
+    std::filesystem::path settings_file_;
     State state_ = State::MainMenu;
+    float ui_scale_ = 1.3F;
     float volume_ = 50.0F;
     std::string save_status_ = "F6: Save game | F9: Load game";
     std::array<char, 129> save_name_{};

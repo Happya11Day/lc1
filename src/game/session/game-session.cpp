@@ -22,7 +22,8 @@ std::string slot_name(std::filesystem::path const &directory)
 GameSession::GameSession(Device const &device, std::filesystem::path const &asset_root,
                          GameSimulation &simulation, std::filesystem::path const &save_directory,
                          OutputSettings output, Window *window, PlayerId player,
-                         CloudSettings &clouds)
+                         CloudSettings &clouds,
+                         std::filesystem::path const &ui_settings_file)
     : window_(window), clouds_(&clouds),
       input_router_(default_game_bindings(), GameInputContext::Gameplay), simulation_(&simulation),
       connection_(simulation.connect(player)), snapshot_(*simulation_->snapshot()),
@@ -30,7 +31,7 @@ GameSession::GameSession(Device const &device, std::filesystem::path const &asse
                           simulation_->dialog_catalog()),
       player_view_(simulation_->continent(),
                    snapshot_.player(connection_.player_id()).pose.position()),
-      music_(world_presentation_.audio_context()),
+      music_(world_presentation_.audio_context()), ui_(ui_settings_file),
       save_directory_(std::filesystem::weakly_canonical(save_directory)),
       saves_root_(save_directory_.parent_path())
 {

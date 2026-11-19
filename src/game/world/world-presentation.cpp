@@ -11,6 +11,7 @@
 #include "lc1/scene/lights/spot-light.hpp"
 #include "lc1/scene/model.hpp"
 #include "lc1/text/utf8.hpp"
+#include "lc1/utf8-path.hpp"
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -109,8 +110,7 @@ WorldPresentation::WorldPresentation(Device const &device, std::filesystem::path
             if (slot.path->empty())
                 continue;
             auto const key =
-                std::pair{std::filesystem::path{*slot.path}.lexically_normal().generic_string(),
-                          slot.color_space};
+                std::pair{path_from_utf8(*slot.path).lexically_normal(), slot.color_space};
             auto found_texture = model_textures_.find(key);
             if (found_texture == model_textures_.end()) {
                 auto texture = std::make_unique<GpuTexture>(

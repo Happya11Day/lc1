@@ -27,6 +27,7 @@ struct ApplicationConfig {
     std::filesystem::path asset_root = "runtime/assets";
     std::filesystem::path dialog_root = "runtime/dialogs";
     std::filesystem::path save_root = "runtime/saves/01";
+    std::filesystem::path ui_settings_file = "runtime/user-settings.yaml";
 };
 
 // Owns platform/graphics lifetime and the local simulation. GameSession borrows the
